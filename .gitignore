@@ -1,8 +1,35 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
-.cache
-*.pyc
-.env
-venv/
-*.sqlite3
+*.py[cod]
+*.so
+
+# Caches
+.cache/
 *.log
-*.DS_Store
+
+# Environment
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Ignore test results
+*.coverage
+coverage/
+
+# Ignore uploads or compiled files if any
+*.zip
+*.tar.gz
+*.egg-info/
+
+# Ignore anything else project-specific
+/static/uploads/
