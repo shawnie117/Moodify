@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link href="{{ url_for('static',filename='css/home.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jaini+Purva:wght@400&display=swap" />
+    <title>Moodify</title>
+</head>
+<body>
+    <p class="title">Welcome to Moodify</p>
+    <div class="card fade-in">
+        <p class="subtitle">🎧 Discover music that matches your mood 🎶</p>
+        <p class="features-title">✨ Features</p>
+        <ul class="features-list">
+            <li>Mood detection using AI.</li>
+            <li>Curated playlists and videos based on mood.</li>
+            <li>Interactive and immersive music experience.</li>
+        </ul>
+        <form action="{{ url_for('login') }}">
+            <button class="get-started-button">Get Started</button>
+        </form>
+    </div>
+</body>
+</html>

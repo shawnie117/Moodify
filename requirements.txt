@@ -1,0 +1,17 @@
+mysqlclient
+flask-mysqldb
+flask_assets
+flask
+transformers
+torch
+textblob
+spotipy
+google-generativeai
+opencv-python
+deepface 
+tf-keras
+tensorflow==2.18.0
+requests
+google-api-python-client
+youtube-search-python
+python-dotenv

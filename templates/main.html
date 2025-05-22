@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Moodify</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+  <nav class="nav">
+    <a href="/logout"><button class="logout-btn">Logout</button></a>
+  </nav>
+
+  <div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <h2>Welcome, {{ firstname }}</h2>
+      <div class="mode-switch">
+        <button id="textModeBtn" class="mode-btn active">Text Detection</button>
+        <button id="faceModeBtn" class="mode-btn">Face Detection</button>
+      </div>
+      <!-- Text Detection Form -->
+      <div id="text-form" class="dashboard-box">
+        <form id="textForm" action="/detect-mood" method="POST">
+          <textarea name="text" id="textInput" rows="5" placeholder="Enter text to detect mood..." required></textarea>
+          <br>
+          <button class="submit-btn" type="submit">Detect Mood</button>
+        </form>
+      </div>
+      <!-- Face Detection Section -->
+      <div id="face-form" class="dashboard-box" style="display: none;">
+        <video id="webcam" autoplay playsinline></video>
+        <br>
+        <button class="submit-btn" id="faceDetectBtn">Capture and Detect Mood</button>
+      </div>
+      <!-- Hidden Form for Image Upload -->
+      <form id="uploadForm" action="/detect-mood-from-face" method="POST" enctype="multipart/form-data"
+        style="display: none;">
+        <input type="file" name="image" id="imageInput">
+      </form>
+      <canvas id="canvas" style="display: none;"></canvas>
+    </div>
+    <!-- Right Panel (Results Section) -->
+    <div class="right-panel">
+      {% if mood %}
+      <h2 class="glow">Detected Mood: {{ mood }}</h2>
+      <h4>Recommended Movie Genre: {{ movie }}</h4>
+      <h3 class="section-title">🎵 Music Recommendations</h3>
+      {% for lang, videos in music_videos_lang.items() %}
+      <h4>{{ lang }} Songs</h4>
+      <div class="youtube-container">
+        {% for video in videos %}
+        <div class="youtube-card" onclick="openPopup('{{ video.url }}')">
+          <img src="{{ video.thumbnail }}" alt="{{ video.title }}">
+          <p>{{ video.title }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <h3 class="section-title">🎥 Additional YouTube Videos</h3>
+      <div class="youtube-container">
+        {% for video in youtube_videos %}
+        <div class="youtube-card" onclick="openPopup('{{ video.url }}')">
+          <img src="{{ video.thumbnail }}" alt="{{ video.title }}">
+          <p>{{ video.title }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <h2>Please enter text or use face detection to see mood results!</h2>
+      {% endif %}
+      <a href="{{ url_for('home') }}" class="back-btn">🔙 Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const textBtn = document.getElementById("textModeBtn");
+      const faceBtn = document.getElementById("faceModeBtn");
+      const textFormContainer = document.getElementById("text-form");
+      const faceFormContainer = document.getElementById("face-form");
+      const video = document.getElementById("webcam");
+      const canvas = document.getElementById("canvas");
+      const imageInput = document.getElementById("imageInput");
+      const uploadForm = document.getElementById("uploadForm");
+      const faceDetectBtn = document.getElementById("faceDetectBtn");
+
+      let stream = null;
+
+      function setActiveMode(mode) {
+        if (mode === "text") {
+          textFormContainer.style.display = "block";
+          faceFormContainer.style.display = "none";
+          textBtn.classList.add("active");
+          faceBtn.classList.remove("active");
+          stopWebcam();
+        } else if (mode === "face") {
+          faceFormContainer.style.display = "block";
+          textFormContainer.style.display = "none";
+          faceBtn.classList.add("active");
+          textBtn.classList.remove("active");
+          startWebcam();
+        }
+      }
+
+      async function startWebcam() {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+        } catch (err) {
+          alert("Webcam access denied or unavailable.");
+        }
+      }
+
+      function stopWebcam() {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          video.srcObject = null;
+          stream = null;
+        }
+      }
+
+      function captureAndSend() {
+        const context = canvas.getContext("2d");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0);
+        canvas.toBlob(function (blob) {
+          const file = new File([blob], "face.jpg", { type: "image/jpeg" });
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          imageInput.files = dt.files;
+          uploadForm.submit();
+        }, "image/jpeg");
+      }
+
+      textBtn.addEventListener("click", () => setActiveMode("text"));
+      faceBtn.addEventListener("click", () => setActiveMode("face"));
+      faceDetectBtn.addEventListener("click", captureAndSend);
+
+      // Set default mode to text
+      setActiveMode("text");
+    });
+
+    function openPopup(videoUrl) {
+      window.open(videoUrl, "_blank");
+    }
+  </script>
+</body>
+
+</html>

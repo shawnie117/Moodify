@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: 'Jaini Purva', cursive;
+    color: white;
+    text-align: center;
+    background-image: url("../images/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.title {
+    font-size: 72px;
+    font-weight: bold;
+    margin-top: 80px;
+    animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+.card {
+    position: relative;
+    top: 60px;
+    margin: auto;
+    width: 600px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    animation: slideIn 1s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(100px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.subtitle {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.features-title {
+    font-size: 32px;
+    color: #ffa500;
+    margin-bottom: 10px;
+}
+
+.features-list {
+    list-style: disc inside;
+    font-size: 18px;
+    text-align: left;
+    margin: 0 auto 30px auto;
+    max-width: 500px;
+    padding-left: 0;
+}
+
+.get-started-button {
+    background: linear-gradient(-39.08deg, #1f13ff, #ff12b8 86.06%);
+    border: none;
+    padding: 15px 40px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.get-started-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ff12b8, 0 0 25px #1f13ff;
+}
+
+@media (max-width: 700px) {
+    .card {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .title {
+        font-size: 48px;
+    }
+
+    .subtitle, .features-list {
+        font-size: 16px;
+    }
+}
